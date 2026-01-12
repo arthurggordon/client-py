@@ -5,8 +5,12 @@ name = "tikv-client"
 version = "0.0.4"
 
 [dependencies]
-pyo3 = { version = "0.19", features = ["extension-module"] }
-pyo3-asyncio = { version = "0.19", features = ["tokio-runtime", "attributes"] }
+# pyo3 = { version = "0.19", features = ["extension-module"] }
+# pyo3-asyncio = { version = "0.19", features = ["tokio-runtime", "attributes"] }
+pyo3 = { version = "0.20.3", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.20.0", features = ["tokio-runtime", "attributes"] }
+
+
 tikv-client = { git = "https://github.com/tikv/client-rust.git", rev = "b12f95e3b2723ed677f10694021545837d746aed" }
 tokio = { version = "1", features = ["sync", "rt"] }
 
@@ -16,3 +20,11 @@ openssl = { version = "0.10.57", features = ["vendored"] }
 [lib]
 crate-type = ["cdylib"]
 name = "tikv_client"
+
+
+# [target.x86_64-apple-darwin]
+[target.aarch64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-undefined",
+  "-C", "link-arg=dynamic_lookup",
+]

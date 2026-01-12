@@ -43,7 +43,7 @@ impl RawClient {
     #[pyo3(signature=(key, cf="default"))]
     pub fn get<'p>(&self, py: Python<'p>, key: Vec<u8>, cf: &str) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let val: Option<Py<PyBytes>> = inner?
                 .get(key)
@@ -62,7 +62,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let kvpairs = inner?.batch_get(keys).await.map_err(to_py_execption)?;
             let py_list = to_py_kv_list(kvpairs)?;
@@ -82,7 +82,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let range = to_bound_range(start, end, include_start, include_end);
             let kvpairs = inner?.scan(range, limit).await.map_err(to_py_execption)?;
@@ -103,7 +103,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let range = to_bound_range(start, end, include_start, include_end);
             let keys = inner?
@@ -124,7 +124,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             inner?.put(key, value).await.map_err(to_py_execption)?;
             Ok(Python::with_gil(|py| py.None()))
@@ -139,7 +139,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let pairs = from_py_dict(pairs)?;
             inner?.batch_put(pairs).await.map_err(to_py_execption)?;
@@ -150,7 +150,7 @@ impl RawClient {
     #[pyo3(signature=(key, cf="default"))]
     pub fn delete<'p>(&self, py: Python<'p>, key: Vec<u8>, cf: &str) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             inner?.delete(key).await.map_err(to_py_execption)?;
             Ok(Python::with_gil(|py| py.None()))
@@ -165,7 +165,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             inner?.batch_delete(keys).await.map_err(to_py_execption)?;
             Ok(Python::with_gil(|py| py.None()))
@@ -183,7 +183,7 @@ impl RawClient {
         cf: &str,
     ) -> PyResult<&'p PyAny> {
         let inner: PyResult<tikv_client::RawClient> =
-            try { self.inner.with_cf(cf.try_into().map_err(to_py_execption)?) };
+            { Ok(self.inner.with_cf(cf.try_into().map_err(to_py_execption)?)) };
         future_into_py(py, async move {
             let range = to_bound_range(start, end, include_start, include_end);
             inner?.delete_range(range).await.map_err(to_py_execption)?;
