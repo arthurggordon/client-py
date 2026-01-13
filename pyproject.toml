@@ -2,7 +2,8 @@
 name = "tikv_client"
 description = "TiKV Client for Python"
 readme = "README.md"
-requires-python = ">=3.6"
+version = "0.0.4"
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
 keywords = ["TiKV"]
 authors = [
